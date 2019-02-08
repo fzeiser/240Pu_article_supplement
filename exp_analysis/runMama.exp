@@ -1,0 +1,267 @@
+#!/usr/bin/expect
+
+set timeout 20
+
+# Variables
+# set Root_File "../239Pu/offline_Pu239_dp_040.root"
+set Name_Alfna_after_root "alfna"
+set Name_Alfna_unfolded "alfna_un"
+set Name_after_Mama "fg"
+
+ #  Which unfolding option shall be used;
+					#1= Recommended for xxx
+                    # 2= Default
+# probably doesn't work yet with Un="1"; have to try!
+set Un_Option "1"
+
+# parameters
+#recalibrate
+# recalibrate for 1, don't for 0
+set bol_recal "1"
+set a0 "-2047.84"
+set a1 "33.84"
+set a2 "0"
+# this will effect the number of Y channels
+set Ychannels "252"
+# for the modify/direct decay option
+set YChannelStart "312"
+set ModifyEx1 "129"
+set ModifyLenEx1 "14"
+set ModifyEx2 "106"
+set ModifyLenEx2 "9"
+set ModifyValue1 "0"
+set ModifyValue2 "0"
+
+# cut diagonal at
+set cdx1 "154"
+set cdy1 "139"
+set cdx2 "186"
+set cdy2 "168"
+
+# number of loops for FG
+set nLoops 6
+# and for the active decay
+set nLoops2 3
+
+
+send "alfna: $Name_Alfna_after_root \n\n"
+send "echo Sure this is the right one?\n\n"
+
+## important: in order to use the script in mama, send commands with eg. send "re\r"
+## where \r is the return. Next, let the script sleep for a fort time (i used 0.1s)
+## If you use a command that will take longer (like unfolding), use f eks
+## expect -timeout -1 "Some text at the end of the output of unfolding" { sleep 0.1 }
+## (the timeout flag with -1 says, that there is not timeout-> expect will wait until the
+##    "text" appears.)
+
+spawn mama
+sleep 1.5
+
+#read input file
+send "re\r"
+sleep 0.1
+send "\r"
+sleep 0.1
+send "$Name_Alfna_after_root \r"
+sleep 1
+
+# Compression
+## standard: 4 along both axis
+send "co\r"
+sleep 0.1
+send "\r"
+sleep 0.1
+send "\r"
+sleep 0.1
+send "4\r"
+sleep 0.1
+send "4\r"
+sleep 0.1
+
+# get through fill negatives and wait until it's finished
+send "fn\r"
+for {set i 0} {$i < 10} {incr i 1} {
+sleep 0.1
+send "\r"
+}
+expect -timeout -1 "After  number of neg. ch. is" { sleep 0.1 }
+
+# remove negatives
+send "rn\r"
+ sleep 0.1
+
+for {set i 0} {$i < 5} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+
+
+# response matrix
+send "rm\r"
+ sleep 0.1
+
+for {set i 0} {$i < 6} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+expect -timeout -1 "Parameters for response function written to resp.dat" { sleep 0.1 }
+
+# unfolding
+send "un\r"
+sleep 0.1
+
+for {set i 0} {$i < 9} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+expect "Option (1/2/3) " { send "$Un_Option\r"}
+sleep 0.1
+
+for {set i 0} {$i < 5} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+expect -timeout -1 "Calibration is a0=" {sleep 0.1}
+
+# recalibrate y-axis
+if {$bol_recal == 1} {
+send "ca\r"
+	for {set i 0} {$i < 5} {incr i 1} {
+	 send "\r"
+	 sleep 0.1
+	}
+send -- "$a0\r"
+	sleep 0.1
+send "$a1 \r"
+	sleep 0.1
+send "$a2 \r"
+	sleep 0.1
+	send "\r"
+	sleep 0.1
+	send "\r"
+	sleep 0.1
+}
+
+# cut diagonal
+send "cd\r"
+	sleep 0.1
+send "$cdx1 \r"
+	sleep 0.1
+send "$cdy1 \r"
+	sleep 0.1
+send "$cdx2 \r"
+	sleep 0.1
+send "$cdy2 \r"
+	sleep 0.1
+
+# fn and rn again
+# get through fiss negatives and wait until it's finished
+send "fn\r"
+	for {set i 0} {$i < 15} {incr i 1} {
+	sleep 0.1
+	send "\r"
+	}
+expect -timeout -1 "After  number of neg. ch. is" { sleep 0.1 }
+
+# # remove negatives
+send "rn\r"
+ sleep 0.1
+
+for {set i 0} {$i < 5} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+
+# write unfolded matrix
+# wr
+send "wr\r"
+for {set i 0} {$i < 10} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+expect "Filename" { send "$Name_Alfna_unfolded\r" }
+
+
+
+
+# # First generation matrix
+send "fg\r"
+ sleep 0.1
+for {set i 0} {$i < 16} {incr i 1} {
+sleep 0.1
+send "\r"
+}
+for {set i 0} {$i < ($Ychannels)} {incr i 1} {
+sleep 0.001
+send "\r"
+}
+
+sleep 0.2
+for {set i 0} {$i < ($nLoops)+1 } {incr i 1} {
+sleep 0.2
+send "\r"
+}
+
+
+# active/modified direct decay
+# expect -timeout -1 "Iteration loop = $nLoops" { sleep 0.3 }
+expect -timeout -1 "Iteration loop =  $nLoops" { sleep 0.3 }
+for {set j 0} {$j < $nLoops2} {incr j 1} {
+	sleep 0.2
+	send "1\r"
+	#send "1"
+	#interact
+	sleep 0.2
+	for {set i 0} {$i < ($YChannelStart-$ModifyEx1)} {incr i 1} {
+	sleep 0.001
+	send "1\r"
+	}
+	for {set i 0} {$i < ($ModifyLenEx1)} {incr i 1} {
+	sleep 0.001
+	send "$ModifyValue1\r"
+	}
+	for {set i 0} {$i < ($ModifyEx1-$ModifyLenEx1-$ModifyEx2)} {incr i 1} {
+	sleep 0.001
+	send "1\r"
+	}
+		for {set i 0} {$i < ($ModifyLenEx2)} {incr i 1} {
+	sleep 0.001
+	send "$ModifyValue2\r"
+	}
+	for {set i 0} {$i < (($Ychannels)-($YChannelStart-$ModifyEx2+$ModifyLenEx2))} {incr i 1} {
+	sleep 0.001
+	send "1\r"
+	}
+	#interact
+}
+
+sleep 0.2
+send "0\r"
+
+# fn and rn again
+# get through fiss negatives and wait until it's finished
+send "fn\r"
+	for {set i 0} {$i < 11} {incr i 1} {
+	sleep 0.1
+	send "\r"
+	}
+expect -timeout -1 "After  number of neg. ch. is" { sleep 0.1 }
+
+# # remove negatives
+send "rn\r"
+ sleep 0.1
+
+for {set i 0} {$i < 5} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+
+# wr
+send "wr\r"
+for {set i 0} {$i < 10} {incr i 1} {
+ send "\r"
+ sleep 0.1
+}
+expect "Filename" { send "$Name_after_Mama\r" }
+
+interact

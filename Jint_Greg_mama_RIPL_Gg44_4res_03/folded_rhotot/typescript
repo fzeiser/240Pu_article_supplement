@@ -1,0 +1,159 @@
+Script started on Tue 03 Jul 2018 01:04:38 PM CEST
+ 
+ ____________________________________________________
+|                                                    |
+|              Welcome to M A M A  7.4.1             |
+|                                                    |
+|   MAtrix MAnipulation, Oslo Cyclotron Laboratory   |
+|           Magne Guttormsen, November 2002          |
+|                                                    |
+|   MAMA handles 2 matrices of dimension 4096x2048   |
+|       and 2 singles spectra of length 8192         |
+|                                                    |
+| Imortant commands:                                 |
+|  HE - help            ST - stop MAMA               |
+|  RE - read file       WR - write file              |
+|  DS - display spec.   CR - curser, activate spec.  |
+|  HE NW - news                                      |
+|____________________________________________________|
+mama>re
+Destination spectrum <1>:1
+Filename          <TEST>:ExEg.m
+ FILE=Disk
+ KIND=Matrix
+ LABORATORY=Oslo Cyclotron Laboratory (OCL)
+ EXPERIMENT=siri2root
+ COMMENT=none
+ TIME=2018-05-26 02:50:41
+ CALIBRATION EkeV=6, 0.000000E+00, 2.500000E+01, 0.000000E+00, 0.000000E+00, 2.500000E+01, 0.000000E+00
+ PRECISION=16
+ DIMENSION=2,0: 299,0: 299
+ CHANNEL=(0: 299,0: 299)
+......  
+mama>ds
+mama>rm
+Dimension of response-matrix < 300>:
+
+Cal. coeff. a0 (keV)     <     0.0>:
+Cal. coeff. a1 (keV/ch)  <    25.0>:
+  
+ List of response functions. The ones marked old, are not recommended
+ (1) NaI_old,    CACTUS 5x5 inch before 2012
+ (2) LaBr_2012,  Campaign 4x8 inch LaBr from Milano in CACTUS frame
+ (3) NaI_2012,   CACTUS 5x5 inch after 2012
+ (4) Seg2,       SuN at MSU 2014, with target inside  (2 cm?), GEANT4
+ (5) Seg3,       SuN at MSU 2014, with target outside (2 cm?), GEANT4
+ (6) Clover_old, Notre Dame 2015, GEANT4
+ (7) Clover,     Notre Dame 2015, GEANT4
+ (8) Seg23,      SuN at MSU 2015 with target in center, GEANT4
+ (9) Gaussian
+
+Choose your response function <3>:
+  
+ If you are unfolding/folding a gamma-ray matrix or spectrum,
+ you should create response functions with 10 times less FWHM
+ than experimentally known. Then FWHM(response) = FWHM(real)/10,
+ which is optimal for the unfolding (UN) and folding (FO) procedures.
+ If you just want to view the response matrix with command GR,
+ then use a factor = 1. Then FWHM(response) = FWHM(real).
+
+Respons functions for unfolding/folding (10.) or viewing (1.) <10.0>:
+Real experimental relative FWHM value at Egam=1.33 MeV (%)<  6.8>:
+
+(In the calculation the response function is obtained
+with a FWHM value of (1/10.0)*(the real experimental FWHM)
+due to technical reasons in the unfolding procedure)
+..........
+ Parameters for response function written to resp.dat
+
+mama>fo
+Destination spectrum <2>:
+Source spectrum      <1>:
+
+Dimension along x-axis < 300>:
+Dimension along y-axis < 300>:
+
+Include total NaI-eff.    (y/n) <y>:
+  
+ The efficiency at low energy (< 1000 keV) have to be given.
+ It depends on various experimental conditions as thresholds
+ on ADCs, gamma-absorber (2 mm Cu), timing etc. The program
+ always assumes Eff = 0.0 at Egam < 30 keV and Eff = 1.00 at
+ Egam > 1000 keV. However, in between these energies you can
+ define a new shape of the discrimination.
+  
+   |                                                ************
+   |                                 ***************            
+0.8|                               **                           
+   |                                                            
+0.6|                            ***                             
+   |                       *****                                
+0.4|                                                            
+   |                     **                                     
+0.2|                  ***                                       
+   |                **                                          
+0.0|---------.---------.---------.---------.---------.---------.
+   0        100       200       300       400       500   E(keV)
+
+Do you want to change the discriminator threshold <n>:
+ Give upper limits for the unfolding. The boarder is
+ given by interpolation between (x1,y1) and (x2,y2)
+  
+     (x1,y1)  first point
+ xxxxxxx
+ xxxxxxxxx
+ xxxxxxxxxxx
+ xx matrix xxx
+ xxxxxxxxxxxxxxx
+             (x2,y2)  second point
+  
+
+First point x1  <  299>:
+First point y1  <  299>:
+Second point x2 <  299>:
+Second point y2 <    0>:
+Calibration is a0=   0.0keV, a1=  25.00keV/ch
+mama>ca
+ Choose spectrum type and spectrum number
+
+      singles spectrum               1
+      set of spectra NA-1, NA-2,...  2
+      2-dimensional spectrum         3
+
+Please, choose your type       <3>:
+Spectrum to calibrate          <2>:
+
+Cal. coeff. a0 (keV) on x-axis    <        0.0>:
+Cal. coeff. a1 (keV/ch) on x-axis <     25.000>:
+Cal. coeff. a2 (keV/ch2) on x-axis<   0.00E+00>:
+
+Cal. coeff. a0 (keV) on y-axis    <        0.0>:
+Cal. coeff. a1 (keV/ch) on y-axis <      1.000>:25
+Cal. coeff. a2 (keV/ch2) on y-axis<   0.00E+00>:
+
+Dimension along x-axis of matrix < 300>:
+Dimension along y-axis of matrix < 300>:
+mama>wr
+
+Spectrum to write            <2>:
+Singles spectrum                1
+Set of spectra NA-0, NA-1,...   2
+2-dimensional spectrum (matrix) 3
+Please, choose your type     <3>:
+
+Cal. coeff. a0 (keV) on x-axis     <        0.0>:
+Cal. coeff. a1 (keV/ch) on x-axis  <     25.000>:
+Cal. coeff. a2 (keV/ch2) on x-axis < 0.0000E+00>:
+
+Cal. coeff. a0 (keV) on y-axis     <        0.0>:
+Cal. coeff. a1 (keV/ch) on y-axis  <     25.000>:
+Cal. coeff. a2 (keV/ch2) on y-axis < 0.0000E+00>:
+
+Dimension on x-axis (max=4096) < 300>:
+Dimension on y-axis (max=2048)  < 300>:
+Filename                       <TEST>:ExEg. Fo.m
+mama>st
+Are you sure you want to exit? (y/n)y
+ 
+
+Script done on Tue 03 Jul 2018 01:07:06 PM CEST

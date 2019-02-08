@@ -1,0 +1,42 @@
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 147.97301 	 2.38666 	 16.69 	 2.51 	 0.67 	 1.19 	 2.10 	 0.30 	 1.09 	 0.36 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 443.82992 	 4.98685 	 49.82 	 3.14 	 1.27 	 1.17 	 2.30 	 1.13 	 1.91 	 0.14 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 286.09294 	 3.25106 	 22.58 	 3.51 	 1.20 	 1.30 	 2.33 	 0.41 	 1.12 	 0.45 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 157.42406 	 1.78891 	 31.71 	 2.92 	 1.33 	 1.03 	 2.21 	 0.66 	 1.42 	 0.24 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 148.19713 	 2.39028 	 16.61 	 2.51 	 0.67 	 1.18 	 2.10 	 0.30 	 1.09 	 0.36 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 145.32694 	 2.34398 	 16.14 	 2.46 	 0.67 	 1.27 	 2.08 	 0.20 	 1.14 	 0.36 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 174.74802 	 2.68843 	 13.68 	 2.26 	 0.59 	 1.48 	 2.59 	 0.90 	 0.00 	 0.33 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 172.64891 	 2.65614 	 13.70 	 2.26 	 0.59 	 1.49 	 2.59 	 0.90 	 0.00 	 0.33 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 172.54189 	 2.65449 	 13.75 	 2.26 	 0.59 	 1.49 	 2.59 	 0.90 	 0.00 	 0.33 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 167.26548 	 2.57332 	 13.03 	 2.25 	 0.58 	 1.44 	 2.59 	 0.90 	 0.00 	 0.29 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 140.14401 	 2.26039 	 15.77 	 2.45 	 0.67 	 1.24 	 2.08 	 0.20 	 1.12 	 0.33 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 115.53256 	 1.86343 	 15.52 	 2.47 	 0.67 	 1.21 	 2.08 	 0.20 	 1.15 	 0.34 	 True
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 117.42452 	 1.89394 	 16.18 	 2.10 	 0.30 	 1.07 	 2.51 	 0.68 	 1.13 	 0.34 	 False
+
+seed 	 chi**2 	 red.chi**2 	 B(M1) 	 E03 	 Gamma03 	 sigma03 	 E04 	 Gamma04 	 sigma04	 T 	 resultsucess
+ 124 	 134.49230 	 2.06911 	 14.47 	 2.28 	 0.64 	 1.47 	 2.59 	 0.90 	 0.00 	 0.30 	 True
