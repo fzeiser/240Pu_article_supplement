@@ -97,10 +97,14 @@ folder_rho_mid ="rhotot_T0.415"
 energy, fermigas, rholev, rhopaw, Nrholev, Nrhopaw= readNLD(folder_rho_mid)
 plt.plot(energy[23:], fermigas[23:], '--', color='grey', label='Constant-temperature model')
 # plt.hold('on')
-plt.plot(energy[0:Nrholev], rholev, color='black', label='Known levels (binned)')
+plt.step(energy[0:Nrholev], rholev, color='black', label='Known levels (binned)',where='mid')
 plt.errorbar(Bn, rho_Bn, yerr=rho_Bnerr, fmt='s', markersize="4", label=r'$\rho$ from $D0$', color='black')
 
 plt.errorbar(energy[0:Nrhopaw], rhopaw[:,0], yerr=rhopaw[:,1], fmt='d', markersize="5",color='red', label='Present work, exp. data points')
+
+# nld_err = np.c_[(energy[0:Nrhopaw], rhopaw[:,1]/rhopaw[:,0])]
+# for i in range(len(nld_err)):
+# 	print("Rel err at Ex: {:.2f}: \t {:.2f}".format(nld_err[i,0], nld_err[i,1]))
 
 folder_rho_mid ="rhotot_T0.405"
 energy, fermigas_low, rholev, rhopaw_low, Nrholev, Nrhopaw= readNLD(folder_rho_mid)
@@ -127,7 +131,7 @@ handles, labels = axes.get_legend_handles_labels()
 handles = [handles[-1], handles[2], handles[-2], handles[0], handles[1]]
 labels = [labels[-1], labels[2], labels[-2], labels[0], labels[1]]
 
-axes.legend(handles, labels, numpoints=1, framealpha=0.2)
+axes.legend(handles, labels, numpoints=1, framealpha=0)
 # plt.legend(loc='upper left', fontsize=13)
 plt.ylabel(r'Level density $\rho (E)$ [MeV$^{-1}$]')
 plt.xlabel('Excitation energy [MeV]')
@@ -135,4 +139,6 @@ plt.xlabel('Excitation energy [MeV]')
 # plt.text(0,1e6, 'PRELIMINARY', alpha=0.1, fontsize=70, rotation=30)
 fig.tight_layout()
 plt.savefig('level_density_pyplot.png')
+
+print("binning: ", energy[1]-energy[0])
 plt.show()
