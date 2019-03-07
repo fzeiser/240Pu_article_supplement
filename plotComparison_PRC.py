@@ -50,6 +50,12 @@ def ReadFiles(folder, label):
     except:
         pass
 
+    try:
+        gsf_input_ext = np.loadtxt(folder+"/../strengthext_export.txt")
+        data["gsf_input_ext"] = gsf_input_ext
+    except:
+        pass
+
     return data
 
 def log_interp1d(xx, yy, kind='linear'):
@@ -77,7 +83,7 @@ OCL_Potel03 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_05/folded_rhotot",r"
 
 current_dataset = OCL_Potel02 # which dataset should we compare to
 gsf_scaling_fact = 43./44.3 # count for Gg
-Ecut = -np.inf
+Ecut = 1.7
 
 Sn = 6.534
 E_crit = 1.03755 # critical energy / last discrete level
@@ -153,10 +159,6 @@ NLD_obs_binned[:nbins,0] = bins[:nbins]
 NLD_obs_binned[:,1] = hist/binwidth_goal
 NLD_obs_binned[:len(NLD_obs_binned_disc),1] += NLD_obs_binned_disc[:,1]
 
-# plot "analyzed nld"
-ax.step(np.append(-binwidth_goal,NLD_obs_binned_disc[:-1,0])+binwidth_goal/2.,np.append(0,NLD_obs_binned_disc[:-1,1]), "k", where="pre",label="input NLD #4")
-ax.plot(NLD_obs_binned_cont[:,0], NLD_obs_binned_cont[:,1], "k")
-
 def plotNLDs(dataset, **kwarg):
     plotData(dataset, dicEntry="nld", axis=ax, **kwarg)
     ratio_nld = calcRatioTrue(dataset,nld_init, "nld")
@@ -179,8 +181,15 @@ nld_init = OCL_Potel01['nld_cont']
 if(nld_init[0,0]<E_crit-0.1 or nld_init[-1,0]>Sn+0.1):
     raise ValueError("Loaded continuum nld out of boundaries")
 
-ax.plot(nld_init[:,0], nld_init[:,1],"y-", label="exp \"obs.\"")
+ax.plot(nld_init[:,0], nld_init[:,1],"r-",
+       zorder=10,
+       alpha=0.7,
+       label="experiment")
 # NLD_obs_binned=np.c_[E_exp,nld_init]
+
+# plot "analyzed nld"
+ax.step(np.append(-binwidth_goal,NLD_obs_binned_disc[:-1,0])+binwidth_goal/2.,np.append(0,NLD_obs_binned_disc[:-1,1]), "k", where="pre",label="input #4")
+ax.plot(NLD_obs_binned_cont[:,0], NLD_obs_binned_cont[:,1], "k")
 
 plotNLDs(OCL_Potel01, color=color_pallet[1])
 plt.savefig("nld_RAINIER_1.pdf")
@@ -233,13 +242,24 @@ plt.setp(ax.get_xticklabels(), visible=False)
 
 gsf_obs = OCL_Potel01["gsf_input"]
 idSn = np.abs(gsf_obs[:,0]-Sn).argmin()
-gsf_obs_plot = ax.plot(gsf_obs[:idSn,0],gsf_obs[:idSn,1], "k-", label="gsf input #4")
-try:
-    gsf_obs_disc = OCL_Potel01["gsf_input_disc"]
-    ax.errorbar(gsf_obs_disc[:,0],gsf_obs_disc[:,1],yerr=gsf_obs_disc[:,2],
-                 fmt="<",color="0.5",alpha=0.5, label="exp. \"obs.\"")
-except KeyError:
-    pass
+gsf_obs_plot = ax.plot(gsf_obs[:idSn,0],gsf_obs[:idSn,1], "r-", label="fit to experiment")
+
+gsf_obs = OCL_Potel02["gsf_input"]
+idSn = np.abs(gsf_obs[:,0]-Sn).argmin()
+gsf_obs_plot = ax.plot(gsf_obs[:idSn,0],gsf_obs[:idSn,1], "k-", label="input #4")
+
+gsf_obs = OCL_Potel01["gsf_input"]
+# try:
+#     cred = 0.5
+#     gsf_obs_disc = OCL_Potel01["gsf_input_disc"]
+#     ax.errorbar(gsf_obs_disc[:,0],cred*gsf_obs_disc[:,1],
+#                  yerr=gsf_obs_disc[:,2],
+#                  fmt="<", color="0.5",
+#                  label="experiment x {:.1f}".format(cred))
+#     OCL_Potel01["gsf_input_ext"][:,1] *= cred
+#     plotData(OCL_Potel01, dicEntry="gsf_input_ext", color="0.5", fmt="--", axis=ax)
+# except KeyError:
+#     pass
 
 def plotGSFs(dataset, **kwarg):
     plotData(dataset, dicEntry="strength", axis=ax, **kwarg)
@@ -326,7 +346,7 @@ rho_new = rho_new_interp(E_interp)
 #              color="0.5", label="generated")
 plt.step(np.append(-binwidth_goal,NLD_obs_binned_disc[:-1,0])+binwidth_goal/2.,np.append(0,NLD_obs_binned_disc[:-1,1]), "k", where="pre",label="input NLD, (binned for discrete)")
 plt.plot(NLD_obs_binned_cont[:,0], NLD_obs_binned_cont[:,1], "k")
-plt.semilogy(nld_init[:,0], nld_init[:,1], label="exp. \"obs\"")
+plt.semilogy(nld_init[:,0], nld_init[:,1], label="experiment")
 plt.plot(E_interp,rho_new, "-", label="new")
 plt.legend(loc="best")
 plt.xlabel(r"$E_x$ [MeV]")

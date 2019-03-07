@@ -17,3 +17,5 @@ The results are used as input to RAINIER, which we can see in `Jint_Greg_mama_RI
 - `folded_rhotot`: Oslo-Method analysis of RAINIER results, automated via `OsloSim.sh`
 
 On top level we also provide the `plotComparison_PRC` script, which we used to extract the corrected NLD and gSF inputs for the next iteration. It is currently set to produce the corresponding figure in the article. To analyze a different dataset, amend the data loaded to `OCL_Potel02` or redefine `current_dataset = OCL_Potel02`.
+
+Material released in this repository is subject to the MIT License.

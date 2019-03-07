@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import pandas as pd
 
+# import seaborn as sns
+# sns.set()
+
 plt.rcParams["axes.labelsize"] = 15
 
 fig, ax = plt.subplots()
@@ -55,7 +58,8 @@ try:
     Sn=6.5
     idx = abs(data[:,0]-Sn).argmin()
     data = data[:idx,:]
-    plt.semilogy(data[:,0],data[:,1]+data[:,2],"--",alpha=0.5,color="tab:brown")
+    plt.semilogy(data[:,0],data[:,1]+data[:,2],"--",alpha=0.5,
+                 color="tab:brown")
 except:
     pass
 
@@ -73,13 +77,14 @@ data_obs = readGSFdata(files)
 data_obs = data_obs.groupby("label")
 for name, df in data_obs:
     if df["typ"].iloc[0] == 'sum':
-        fmt="o"
+        fmt="s"
     elif df["typ"].iloc[0] == 'M1':
-        fmt="<"
+        fmt="^"
     elif df["typ"].iloc[0] == 'E1':
-        fmt=">"
+        fmt="v"
 # df = data_obs.loc[data_obs['typ'] == 'sum']
-    plt.errorbar(df["x"],df["y"],yerr= df["y_err"], fmt=fmt,  label=name)
+    plt.errorbar(df["x"],df["y"],yerr= df["y_err"], fmt=fmt,
+                 markerfacecolor='none',  label=name)
 
     # df = data_obs.loc[data_obs['typ'] == 'M1']
     # plt.errorbar(df["x"],df["y"],yerr= df["y_err"].values, fmt="o", alpha=0.3, label=df["label"].iloc[0])
@@ -114,7 +119,8 @@ plt.ylabel(r"$\gamma$SF [MeV$^{-3}$]")
 plt.xlim((0,18))
 plt.ylim((2e-8,5e-6))
 plt.tight_layout()
-plt.savefig("gsfs_art.png")
+# plt.savefig("gsfs_art.png")
+plt.savefig("gsfs_art.pdf")
 
 # plt.xlim((0,6.5))
 # plt.ylim((2e-8,5e-7))
