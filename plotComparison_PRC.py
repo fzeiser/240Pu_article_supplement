@@ -20,14 +20,14 @@ sns.set()
 # sns.set(font_scale=1.2) # Bigger than normal fonts
 # sns.set(font_scale=1.2)
 sns.set(rc={'figure.figsize':(5.5,6.5)})
-sns.set_style("ticks", { 'axes.grid': True})
+sns.set_style("ticks", { 'axes.grid': False})
 plt.rcParams["axes.labelsize"] = 15
 plt.rcParams['legend.loc'] = 'best'
 
 cwd = os.getcwd()
 ###########
 
-def ReadFiles(folder, label):
+def ReadFiles(folder, label, marker):
     a0_strength, a1_strength = getCalibrationFromCounting(folder+"/counting.cpp")
     print(("Reading {0}\nwith calibration a0={1:.3e}, a1 ={2:.3e}".format(folder, a0_strength, a1_strength)))
     strength = convertStrength(folder+"/strength.nrm",a0_strength, a1_strength)
@@ -42,7 +42,8 @@ def ReadFiles(folder, label):
              'gsf_input': gsf_input,
     	     'nld': nld,
              'nld_cont' : NLD_exp_cont,
-    		 'label':label}
+    		 'label':label,
+             'marker': marker}
 
     try:
         gsf_input_disc = np.loadtxt(folder+"/../strength_export.txt")
@@ -67,7 +68,9 @@ def log_interp1d(xx, yy, kind='linear'):
 
 
 # OCL_EB05 = ReadFiles(cwd+"/Jint_EB06_mama/folded",r"$g_{pop} = g_{int}$")
-OCL_Potel01 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_01/folded_rhotot",r"result #1")
+OCL_Potel01 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_01/folded_rhotot",
+                        r"result #1",
+                        marker="v")
 # OCL_Potel02 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_02/folded_rhotot",r"Iteration 2, $g_{pop} \ll g_{int}$, r=1.0")
 # OCL_Potel03 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_03/folded_rhotot",r"Iteration 3 $g_{pop} \ll g_{int}$")
 
@@ -76,8 +79,12 @@ OCL_Potel01 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_01/folded_rhotot",r"
 # OCL_Potel03 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_5res_07/folded_rhotot",
 #                         r"Iteration 7 $g_{pop} \ll g_{int}$")
 
-OCL_Potel02 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_04/folded_rhotot",r"result #4")
-OCL_Potel03 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_05/folded_rhotot",r"result #5")
+OCL_Potel02 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_03/folded_rhotot",
+                        r"result #3",
+                        marker="o")
+OCL_Potel03 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_4res_04/folded_rhotot",
+                        r"result #4",
+                        marker="s")
 
 # OCL_Potel02 = ReadFiles(cwd+"/Jint_Greg_mama_RIPL_Gg44_Ecut_02/folded_rhotot",r"Iteration 2, $g_{pop} \ll g_{int}$, r=1.0")
 
@@ -136,6 +143,9 @@ ax.set_ylabel(r'$\rho$ [1/MeV]',fontsize="large")
 ax2.set_xlabel(r'$E_x$ [MeV]',fontsize="large")
 ax2.set_ylabel(r'ratio to experiment',fontsize="large")
 
+ax.text(0.88, 0.1, r"(a)", fontsize=15, transform=ax.transAxes)
+ax2.text(0.88, 0.1, r"(c)", fontsize=15, transform=ax2.transAxes)
+
 # Fine-tune figure; make subplots close to each other and hide x ticks for upper plot
 fig.subplots_adjust(hspace=0, top=0.98, left=0.17, right=0.98)
 plt.setp(ax.get_xticklabels(), visible=False)
@@ -159,10 +169,16 @@ NLD_obs_binned[:nbins,0] = bins[:nbins]
 NLD_obs_binned[:,1] = hist/binwidth_goal
 NLD_obs_binned[:len(NLD_obs_binned_disc),1] += NLD_obs_binned_disc[:,1]
 
-def plotNLDs(dataset, **kwarg):
-    plotData(dataset, dicEntry="nld", axis=ax, **kwarg)
+def plotNLDs(dataset, marker=None, **kwarg):
+    if marker is None:
+        try:
+            marker = dataset["marker"]
+        except KeyError:
+            marker = "v"
+
+    plotData(dataset, dicEntry="nld", axis=ax, marker=marker,**kwarg)
     ratio_nld = calcRatioTrue(dataset,nld_init, "nld")
-    ax2.errorbar(dataset["nld"][:,0], unumpy.nominal_values(ratio_nld), yerr=unumpy.std_devs(ratio_nld), markersize=4, linewidth=1.5, fmt='v-', label=dataset["label"], **kwarg)
+    ax2.errorbar(dataset["nld"][:,0], unumpy.nominal_values(ratio_nld), yerr=unumpy.std_devs(ratio_nld), markersize=4, linewidth=1.5, marker=marker, label=dataset["label"], **kwarg)
     handles, labels = ax.get_legend_handles_labels()
     lgd1= ax.legend(handles, labels, fontsize="medium")
     return ratio_nld
@@ -188,14 +204,14 @@ ax.plot(nld_init[:,0], nld_init[:,1],"r-",
 # NLD_obs_binned=np.c_[E_exp,nld_init]
 
 # plot "analyzed nld"
-ax.step(np.append(-binwidth_goal,NLD_obs_binned_disc[:-1,0])+binwidth_goal/2.,np.append(0,NLD_obs_binned_disc[:-1,1]), "k", where="pre",label="input #4")
-ax.plot(NLD_obs_binned_cont[:,0], NLD_obs_binned_cont[:,1], "k")
+ax.step(np.append(-binwidth_goal,NLD_obs_binned_disc[:-1,0])+binwidth_goal/2.,np.append(0,NLD_obs_binned_disc[:-1,1]), "k", linestyle="-.",where="pre",label="input #3")
+ax.plot(NLD_obs_binned_cont[:,0], NLD_obs_binned_cont[:,1], "k-.")
 
 plotNLDs(OCL_Potel01, color=color_pallet[1])
 plt.savefig("nld_RAINIER_1.pdf")
 
 try:
-    plotNLDs(OCL_Potel02, color=color_pallet[2])
+    plotNLDs(OCL_Potel02, color=color_pallet[2], markerfacecolor='white')
     plt.savefig("nld_RAINIER_2.pdf")
 except:
     pass
@@ -232,6 +248,8 @@ ax2.axhline(1, color='r')
 ax.set_ylabel(r'$\gamma$SF [1/MeV$^3$]',fontsize="large")
 ax2.set_xlabel(r'$E_\gamma$ [MeV]',fontsize="large")
 ax2.set_ylabel(r'ratio to experiment',fontsize="large")
+ax.text(0.88, 0.1, r"(b)", fontsize=15, transform=ax.transAxes)
+ax2.text(0.88, 0.1, r"(d)", fontsize=15, transform=ax2.transAxes)
 
 # Fine-tune figure; make subplots close to each other and hide x ticks for upper plot
 fig.subplots_adjust(hspace=0, top=0.98, left=0.17, right=0.98)
@@ -242,11 +260,11 @@ plt.setp(ax.get_xticklabels(), visible=False)
 
 gsf_obs = OCL_Potel01["gsf_input"]
 idSn = np.abs(gsf_obs[:,0]-Sn).argmin()
-gsf_obs_plot = ax.plot(gsf_obs[:idSn,0],gsf_obs[:idSn,1], "r-", label="fit to experiment")
+gsf_obs_plot = ax.plot(gsf_obs[:idSn,0],gsf_obs[:idSn,1], "r", label="fit to experiment")
 
 gsf_obs = OCL_Potel02["gsf_input"]
 idSn = np.abs(gsf_obs[:,0]-Sn).argmin()
-gsf_obs_plot = ax.plot(gsf_obs[:idSn,0],gsf_obs[:idSn,1], "k-", label="input #4")
+gsf_obs_plot = ax.plot(gsf_obs[:idSn,0],gsf_obs[:idSn,1], "k-.", label="input #3")
 
 gsf_obs = OCL_Potel01["gsf_input"]
 # try:
@@ -261,11 +279,17 @@ gsf_obs = OCL_Potel01["gsf_input"]
 # except KeyError:
 #     pass
 
-def plotGSFs(dataset, **kwarg):
-    plotData(dataset, dicEntry="strength", axis=ax, **kwarg)
-    plotData(dataset, dicEntry="trans", fmt="--", axis=ax, **kwarg)
+def plotGSFs(dataset, marker=None, dashes=None, **kwarg):
+    if marker is None:
+        try:
+            marker = dataset["marker"]
+        except KeyError:
+            marker = "v"
+    plotData(dataset, dicEntry="strength", marker=marker, axis=ax, **kwarg)
+    plotData(dataset, dicEntry="trans", fmt="--", axis=ax,
+             dashes=dashes, **kwarg)
     ratio_gSF = calcRatioTrue(dataset,gsf_obs, "strength")
-    ax2.errorbar(dataset["strength"][:,0], unumpy.nominal_values(ratio_gSF), yerr=unumpy.std_devs(ratio_gSF), markersize=4, linewidth=1.5, fmt='v-', label=dataset["label"], **kwarg)
+    ax2.errorbar(dataset["strength"][:,0], unumpy.nominal_values(ratio_gSF), yerr=unumpy.std_devs(ratio_gSF), markersize=4, linewidth=1.5, marker=marker, label=dataset["label"], **kwarg)
     handles, labels = ax.get_legend_handles_labels()
     lgd1= ax.legend(handles, labels, fontsize="medium")
     return ratio_gSF
@@ -277,13 +301,16 @@ plotGSFs(OCL_Potel01, color=color_pallet[1])
 plt.savefig("gsf_RAINIER_1.pdf")
 
 try:
-    plotGSFs(OCL_Potel02, color=color_pallet[2])
+    plotGSFs(OCL_Potel02, color=color_pallet[2],
+             markerfacecolor='white',
+             dashes=(5,3))
     plt.savefig("gsf_RAINIER_2.pdf")
 except:
     pass
 
 try:
-    plotGSFs(OCL_Potel03, color=color_pallet[4])
+    plotGSFs(OCL_Potel03, color=color_pallet[4],
+             dashes=(10,5))
     plt.savefig("gsf_RAINIER_3.pdf")
 except:
     pass

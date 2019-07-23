@@ -44,8 +44,8 @@ def readGSFdata(files):
 
 
 # some iterations
-data = np.loadtxt("Jint_Greg_mama_RIPL_Gg44_4res_04/GSFTable_py.dat")
-plt.semilogy(data[:,0],data[:,1]+data[:,2],"k-", label="this work, iteration 4")
+data = np.loadtxt("Jint_Greg_mama_RIPL_Gg44_4res_03/GSFTable_py.dat")
+plt.semilogy(data[:,0],data[:,1]+data[:,2],"k-", label="this work, iteration 3")
 
 try:
     folder= "Jint_Greg_mama_RIPL_Gg44_4res_01"
@@ -82,9 +82,18 @@ for name, df in data_obs:
         fmt="^"
     elif df["typ"].iloc[0] == 'E1':
         fmt="v"
+
+    if name == r"$^{239}$Pu($\gamma$,abs), Moraes et al. (1976)":
+        markerfacecolor="orange"
+        alpha=0.7
+    else:
+        markerfacecolor="white"
+        alpha=0.8
+
 # df = data_obs.loc[data_obs['typ'] == 'sum']
     plt.errorbar(df["x"],df["y"],yerr= df["y_err"], fmt=fmt,
-                 markerfacecolor='none',  label=name)
+                 markerfacecolor=markerfacecolor,
+                 alpha=alpha, label=name)
 
     # df = data_obs.loc[data_obs['typ'] == 'M1']
     # plt.errorbar(df["x"],df["y"],yerr= df["y_err"].values, fmt="o", alpha=0.3, label=df["label"].iloc[0])
