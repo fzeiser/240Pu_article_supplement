@@ -1,6 +1,9 @@
 ## Input files/results for the article:
-F. Zeiser et al, "Corrections for restricted spin-ranges in the Oslo Method: The example of nuclear level density and $\gamma$-ray strength function from (d,p)$^{240}\mathrm{Pu}$"
-(submitted)
+**Zeiser, F.**; Tveten, G. M.; Potel, G.; Larsen, A. C.; Guttormsen, M.; Laplace, T. A.; Siem, S.; Bleuel, D. L.; Goldblum, B. L.; Bernstein, L. A.; Garrote, F. L. B.; Campo, L. C.; Eriksen, T. K.; Görgen, A.; Hadynska-Klek, K.; Ingeberg, V. W.; Midtbø, J. E.; Sahin, E.; Tornyi, T.; Voinov, A.; Wiedeking, M. & Wilson, J.  
+**Restricted spin-range correction in the Oslo method: The example of nuclear level density and γ-ray strength function from Pu239(d,p)Pu240**  
+Physical Review C, American Physical Society (APS), 2019, 100   
+DOI: https://doi.org/10.1103/PhysRevC.100.024305
+
 
 ## An overview:
 
